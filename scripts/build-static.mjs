@@ -2,6 +2,7 @@
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync, globSync, statSync } from 'node:fs';
 import { join } from 'node:path';
+import { execSync } from 'node:child_process';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DIST = join(ROOT, 'dist');
@@ -13,6 +14,33 @@ const INCLUDES = [
 
 // Files stored in assets/ that must be served from site root
 const ROOT_ASSETS = ['robots.txt', 'sitemap.xml', 'llms.txt'];
+
+// Derived image assets generated from assets/logo.png
+const DERIVED_IMAGES = [
+  { name: 'favicon-32.png', size: 32 },
+  { name: 'favicon-192.png', size: 192 },
+  { name: 'og-image.png', width: 1200, height: 630 },
+];
+
+function hasSips() {
+  try { execSync('which sips', { stdio: 'ignore' }); return true; }
+  catch { return false; }
+}
+
+async function generateFavicons() {
+  const logo = join(ROOT, 'assets', 'logo.png');
+  if (!existsSync(logo)) return;
+  if (!hasSips()) { console.warn('  ⚠  sips not found, skipping favicon generation'); return; }
+
+  for (const img of DERIVED_IMAGES) {
+    const out = join(ROOT, 'assets', img.name);
+    if (img.width) {
+      execSync(`sips --cropToHeightWidth ${img.height} ${img.width} "${logo}" --out "${out}" 2>/dev/null`);
+    } else {
+      execSync(`sips -Z ${img.size} "${logo}" --out "${out}" 2>/dev/null`);
+    }
+  }
+}
 
 // Load minifiers with graceful fallback
 let minifyCSS, minifyJS, minifyHTML;
@@ -69,6 +97,9 @@ async function minifyFiles(files, label, minifyFn, isAsync = false) {
 }
 
 async function build() {
+  console.log('Generating favicons from logo...');
+  await generateFavicons();
+
   if (existsSync(DIST)) await rm(DIST, { recursive: true });
   await mkdir(DIST, { recursive: true });
 
