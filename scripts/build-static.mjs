@@ -10,7 +10,7 @@
  * Customize the includes array to match your project structure.
  */
 
-import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
+import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join, relative, parse } from 'node:path';
 
@@ -21,7 +21,11 @@ const INCLUDES = [
   'lessons',
   'assets',
   'reference',
+  'project',
   'index.html',
+  '404.html',
+  'robots.txt',
+  'sitemap.xml',
 ];
 
 async function build() {
@@ -33,6 +37,9 @@ async function build() {
     if (!existsSync(src)) continue;
     await cp(src, join(DIST, item), { recursive: true });
   }
+
+  // Write .nojekyll to prevent GitHub Pages from running Jekyll
+  await writeFile(join(DIST, '.nojekyll'), '');
 
   console.log(`Built to ${DIST}`);
   console.log('Deploy dist/ to GitHub Pages or any static host.');
