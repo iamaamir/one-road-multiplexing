@@ -3,7 +3,47 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Multiplexing Course</title>
+  <title>Multiplexing Course — Understand Multiplexing &amp; Demultiplexing | iamaamir</title>
+  <meta name="description" content="Learn multiplexing and demultiplexing with 8 interactive lessons covering computer networking, I/O multiplexing (select, poll, epoll, kqueue), OS ports and sockets, HTTP/2 streams and frames, event loop concurrency, head-of-line blocking, scheduling algorithms, blocking vs non-blocking I/O, WebSocket multiplexing, media time-slicing and jitter buffers, fair queuing, and a real-time chat project.">
+  <meta name="keywords" content="multiplexing, demultiplexing, computer networking, I/O multiplexing, select, poll, epoll, kqueue, ports and sockets, TCP/IP, transport layer, HTTP/2 streams, HTTP/3, QUIC, WebSocket, WebSocket multiplexing, event loop, concurrency, asynchronous I/O, non-blocking I/O, blocking I/O, callbacks, task queue, microtask queue, head-of-line blocking, scheduling algorithms, fair queuing, round-robin, operating systems, network protocols, latency, throughput, bandwidth, jitter buffer, time-division multiplexing, frequency-division multiplexing, circuit switching, packet switching, real-time communication, media streaming, audio video synchronization, network programming, systems programming, backend engineering, server-side development, web performance, multiplexed chat, network architecture">
+  <meta name="robots" content="index, follow">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://iamaamir.github.io/one-road-multiplexing/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://iamaamir.github.io/one-road-multiplexing/">
+  <meta property="og:title" content="Multiplexing Course — Understand Multiplexing &amp; Demultiplexing">
+  <meta property="og:description" content="Learn multiplexing and demultiplexing with 8 interactive lessons covering computer networking, I/O multiplexing, OS ports and sockets, HTTP/2 streams, event loop concurrency, blocking vs non-blocking I/O, WebSocket multiplexing, media time-slicing, and a real-time chat project.">
+  <meta property="og:site_name" content="One Road Multiplexing">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Multiplexing Course — Understand Multiplexing &amp; Demultiplexing">
+  <meta name="twitter:description" content="Learn multiplexing and demultiplexing with 8 interactive lessons covering computer networking, I/O multiplexing, OS ports and sockets, HTTP/2 streams, event loop concurrency, blocking vs non-blocking I/O, WebSocket multiplexing, media time-slicing, and a real-time chat project.">
+
+  <!-- JSON-LD Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": "Multiplexing: One Road, Many Conversations",
+    "description": "Learn to explain multiplexing to a six-year-old, recognize problems it solves, and build a practical real-world use case using one shared transport for many logical channels.",
+    "provider": {
+      "@type": "Person",
+      "name": "iamaamir"
+    },
+    "numberOfLessons": 8,
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "Online",
+      "courseWorkload": "PT2H",
+      "inLanguage": "en"
+    }
+  }
+  </script>
+
   <link rel="stylesheet" href="assets/lesson.css">
   <link rel="expect" href="#page-ready" blocking="render">
   <script defer src="assets/lesson-components.js"></script>
@@ -13,42 +53,42 @@
     <header id="page-ready" class="lesson-header">
       <p class="lesson-meta">Interactive Course</p>
       <h1>Multiplexing</h1>
-      <p class="subtitle">Understand multiplexing and demultiplexing from toy-track intuition to practical systems.</p>
+      <p class="subtitle">Understand multiplexing and demultiplexing — from toy-track intuition to practical computer networking, I/O multiplexing, HTTP/2 streams, WebSocket multiplexing, and real-time systems.</p>
     </header>
 
     <section aria-labelledby="mission-title" class="course-card">
       <h2 id="mission-title">Mission</h2>
-      <p>Learn to explain multiplexing to a six-year-old, recognize problems it solves, and build a practical real-world use case using one shared transport for many logical channels.</p>
+      <p>Learn to explain multiplexing and demultiplexing to a six-year-old, recognize problems they solve in computer networking and operating systems, and build a practical real-world use case — one shared transport for many logical channels — using WebSocket, event loop concurrency, and application-layer framing.</p>
     </section>
 
     <section aria-labelledby="roadmap-title" class="course-card">
       <h2 id="roadmap-title">Roadmap</h2>
       <p id="course-progress" class="connection-indicator" data-state="connected" aria-live="polite">0 of 8 lessons completed</p>
       <ol>
-        <li><a href="lessons/0001-one-road-many-conversations.html">One Road, Many Conversations</a> — labels, frames, multiplexing, demultiplexing.</li>
-        <li><a href="lessons/0002-fair-turns.html">Fair Turns on One Road</a> — head-of-line blocking, scheduling, fairness.</li>
-        <li><a href="lessons/0003-ports-and-sockets.html">Address Labels: Ports and Sockets</a> — OS demultiplexing by protocol, IP, and port.</li>
-        <li><a href="lessons/0004-one-guard-many-doors.html">One Guard, Many Doors</a> — I/O multiplexing, readiness, blocking vs non-blocking.</li>
-        <li><a href="lessons/0005-event-loop-callbacks.html">Event Loop: Callbacks from Readiness</a> — readiness events, task queue, microtask queue.</li>
-        <li><a href="lessons/0006-http2-streams.html">HTTP/2 Streams and Frames</a> — stream IDs, frames, web request multiplexing.</li>
-        <li><a href="lessons/0007-media-time-slices.html">Media Time Slices</a> — timestamped audio/video packets and jitter buffers.</li>
-        <li><a href="lessons/0008-mini-multiplexed-chat.html">Build a Mini Multiplexed Chat</a> — practical app-channel protocol over one transport.</li>
+        <li><a href="lessons/0001-one-road-many-conversations.html">One Road, Many Conversations</a> — multiplexing and demultiplexing with labels, frames, shared medium analogy.</li>
+        <li><a href="lessons/0002-fair-turns.html">Fair Turns on One Road</a> — head-of-line blocking, scheduling algorithms, fair queuing, round-robin.</li>
+        <li><a href="lessons/0003-ports-and-sockets.html">Address Labels: Ports and Sockets</a> — OS demultiplexing by protocol, IP, and port; TCP and UDP sockets.</li>
+        <li><a href="lessons/0004-one-guard-many-doors.html">One Guard, Many Doors</a> — I/O multiplexing with select, poll, epoll, kqueue; blocking vs non-blocking I/O, readiness model.</li>
+        <li><a href="lessons/0005-event-loop-callbacks.html">Event Loop: Callbacks from Readiness</a> — event loop concurrency, readiness events, task queue, microtask queue, asynchronous I/O.</li>
+        <li><a href="lessons/0006-http2-streams.html">HTTP/2 Streams and Frames</a> — stream IDs, binary framing, HTTP/2 multiplexing, HTTP/3 and QUIC.</li>
+        <li><a href="lessons/0007-media-time-slices.html">Media Time Slices</a> — timestamped audio/video packets, jitter buffers, real-time transport, RTP and WebRTC.</li>
+        <li><a href="lessons/0008-mini-multiplexed-chat.html">Build a Mini Multiplexed Chat</a> — practical app-channel protocol over one transport; real-time chat with WebSocket multiplexing.</li>
       </ol>
     </section>
 
     <section aria-labelledby="reference-title" class="course-card">
       <h2 id="reference-title">Reference</h2>
       <ul>
-        <li><a href="reference/glossary.html">Glossary</a></li>
-        <li><a href="reference/cheatsheet.html">Multiplexing cheat sheet</a></li>
-        <li><a href="reference/capstone-worksheet.html">Capstone worksheet</a></li>
-        <li><a href="RESOURCES.md">Resources</a></li>
+        <li><a href="reference/glossary.html">Glossary of multiplexing, demultiplexing &amp; networking terms</a></li>
+        <li><a href="reference/cheatsheet.html">Multiplexing cheat sheet — protocols, APIs &amp; patterns</a></li>
+        <li><a href="reference/capstone-worksheet.html">Multiplexed chat capstone worksheet</a></li>
+        <li><a href="RESOURCES.md">Multiplexing resources &amp; further reading</a></li>
       </ul>
     </section>
 
     <section aria-labelledby="project-title" class="course-card">
-      <h2 id="project-title">Final project</h2>
-      <p>Run a real WebSocket demo where one socket carries chat, presence, and file chunks.</p>
+      <h2 id="project-title">Final project — Multiplexed WebSocket Chat</h2>
+      <p>Run a real-time WebSocket multiplexing demo where one TCP socket carries chat messages, presence indicators, and file chunk transfers using an application-layer multiplexed protocol with channel IDs and framing.</p>
       <p><a href="project/mini-ws-chat.html">Open Mini Multiplexed Chat</a></p>
     </section>
   </main>
