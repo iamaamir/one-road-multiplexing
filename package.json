@@ -1,0 +1,8 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "html-minifier-terser": "^7.2.0",
+    "lightningcss": "^1.29.0",
+    "terser": "^5.37.0"
+  }
+}

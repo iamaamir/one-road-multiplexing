@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://iamaamir.github.io/one-road-multiplexing/sitemap.xml
