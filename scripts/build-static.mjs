@@ -27,6 +27,7 @@ const INCLUDES = [
   '404.html',
   'robots.txt',
   'sitemap.xml',
+  'llms.txt',
 ];
 
 async function build() {
