@@ -23,6 +23,7 @@ const INCLUDES = [
   'reference',
   'project',
   'index.html',
+  '.nojekyll',
   '404.html',
   'robots.txt',
   'sitemap.xml',
@@ -37,9 +38,6 @@ async function build() {
     if (!existsSync(src)) continue;
     await cp(src, join(DIST, item), { recursive: true });
   }
-
-  // Write .nojekyll to prevent GitHub Pages from running Jekyll
-  await writeFile(join(DIST, '.nojekyll'), '');
 
   console.log(`Built to ${DIST}`);
   console.log('Deploy dist/ to GitHub Pages or any static host.');
