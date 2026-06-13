@@ -67,7 +67,7 @@ knowledge-check { display: block; }
 .exercise { background: #eefbf1; border-color: #8bcf9d; }
 .demo-panels { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr); gap: 1rem; align-items: stretch; }
 @media (max-width: 780px) { .demo-panels { grid-template-columns: 1fr; } }
-.demo-panel { padding: 1rem; overflow: hidden; }
+.demo-panel { padding: 1rem; overflow: hidden; overflow-x: scroll; }
 .demo-panel h3 { margin-top: 0; }
 .demo-svg svg { display: block; width: 100%; height: auto; min-height: 260px; }
 .road { fill: #d9e8f7; stroke: #7aa7d6; stroke-width: 2; }
