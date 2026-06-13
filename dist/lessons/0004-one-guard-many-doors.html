@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lesson 4 — One Guard, Many Doors</title>
+  <link rel="stylesheet" href="../assets/lesson.css">
+  <link rel="expect" href="#page-ready" blocking="render">
+  <script defer src="../assets/lesson-components.js"></script>
+</head>
+<body>
+  <main>
+    <lesson-header>
+      <header id="page-ready" class="lesson-header">
+        <p class="lesson-meta">Multiplexing · Lesson 4 · Beginner</p>
+        <h1>One Guard, Many Doors</h1>
+        <p class="subtitle">I/O multiplexing lets one thread watch many sockets and only read the ones that are ready.</p>
+      </header>
+    </lesson-header>
+
+    <section aria-labelledby="framing-title">
+      <h2 id="framing-title">A guard who watches lights, not doors</h2>
+      <p>Imagine one guard in a hallway with many doors. Bad plan: stand at Door A until someone knocks, even if Door B and Door C are already ringing. Better plan: watch a panel of lights. When a light turns on, go to that door.</p>
+      <p><strong>Memorable label: “Watch readiness, not order.”</strong> I/O multiplexing is the light panel. It tells one thread which socket is ready now.</p>
+      <div class="callout">
+        <p><strong>Six-year-old version:</strong> Do not stare at one toy box waiting for it to open. Watch all boxes. When any box pops open, play with that one.</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="concept-title">
+      <h2 id="concept-title">Blocking waits in the wrong place</h2>
+      <p>Last lesson got bytes to the right app using ports and sockets. Now we zoom inside the app. Suppose one server owns many sockets. If it reads socket A first and A has no data yet, the whole thread can block while socket B is already ready.</p>
+      <p><strong>I/O multiplexing</strong> changes the question from “read this socket now” to “which sockets are ready?” Classic APIs such as <code>select</code>, <code>poll</code>, and <code>epoll</code> help programs wait for readiness across many file descriptors. Python’s <code>select</code> docs describe waiting until file descriptors are ready for I/O <a href="https://docs.python.org/3/library/select.html" rel="noreferrer">(Python select docs)</a>.</p>
+      <p>This is the bridge from networking to event loops. An event loop is a guard that keeps asking: “Which thing is ready next?”</p>
+    </section>
+
+    <section aria-labelledby="demo-title">
+      <h2 id="demo-title">Demo: blocking order vs readiness order</h2>
+      <p>Run blocking mode first. Socket B is ready early, but waits behind slow socket A. Then run readiness mode. The app handles ready sockets first.</p>
+
+      <div class="demo-panels">
+        <figure class="demo-panel demo-svg">
+          <h3>Readiness panel</h3>
+          <svg id="io-svg" viewBox="0 0 760 360" role="img" aria-label="One thread processes sockets either in fixed blocking order or readiness order">
+            <rect class="endpoint" x="54" y="58" width="150" height="58" rx="14"></rect>
+            <text class="endpoint-label" x="129" y="92" text-anchor="middle">Socket A ready@5</text>
+            <rect class="endpoint" x="54" y="151" width="150" height="58" rx="14"></rect>
+            <text class="endpoint-label" x="129" y="185" text-anchor="middle">Socket B ready@1</text>
+            <rect class="endpoint" x="54" y="244" width="150" height="58" rx="14"></rect>
+            <text class="endpoint-label" x="129" y="278" text-anchor="middle">Socket C ready@3</text>
+
+            <rect class="road" x="250" y="155" width="245" height="50" rx="25"></rect>
+            <text class="endpoint-label" x="372" y="145" text-anchor="middle">one thread</text>
+
+            <rect class="endpoint" x="565" y="126" width="130" height="105" rx="16"></rect>
+            <text class="endpoint-label" x="630" y="164" text-anchor="middle">handler</text>
+            <text class="endpoint-label" x="630" y="188" text-anchor="middle">processes</text>
+
+            <g id="read-event" class="frame web" transform="translate(270 165)" opacity="0"><rect width="100" height="30" rx="8"></rect><text x="50" y="20" text-anchor="middle">ready</text></g>
+          </svg>
+          <figcaption>Blocking reads follow list order. Readiness reads follow data availability.</figcaption>
+          <div class="controls" aria-label="I/O demo controls">
+            <button class="primary" type="button" id="blocking-demo">Run blocking</button>
+            <button class="primary" type="button" id="ready-demo">Run readiness</button>
+            <button type="button" id="reset-demo">Reset</button>
+          </div>
+          <div id="demo-log" class="event-log" aria-live="polite">Ready. Choose blocking or readiness.</div>
+        </figure>
+
+        <section class="demo-panel" aria-labelledby="table-title">
+          <h3 id="table-title">Processing timeline</h3>
+          <table>
+            <caption>When one thread handles each socket</caption>
+            <thead><tr><th>Step</th><th>Time</th><th>Socket</th><th>Payload</th></tr></thead>
+            <tbody id="timeline-body">
+              <tr><td colspan="4">No events yet.</td></tr>
+            </tbody>
+          </table>
+          <p><strong>What to notice:</strong> readiness order lowers latency for sockets that are ready early.</p>
+        </section>
+      </div>
+    </section>
+
+    <section aria-labelledby="recognize-title">
+      <h2 id="recognize-title">How to recognize this problem</h2>
+      <ul>
+        <li><strong>One worker watches many I/O sources:</strong> sockets, files, pipes, timers.</li>
+        <li><strong>Waiting on one source can freeze others:</strong> slow client blocks fast client.</li>
+        <li><strong>You need low latency without one thread per connection:</strong> event loop shape.</li>
+        <li><strong>You hear select, poll, epoll, kqueue, or event loop:</strong> readiness multiplexing is nearby.</li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="exercise-title" class="exercise">
+      <h2 id="exercise-title">Exercise: run the I/O multiplexer model</h2>
+      <p>Run:</p>
+      <pre><code>node --test tests/io-multiplexer.test.mjs</code></pre>
+      <p>Then open <code>src/io-multiplexer.mjs</code>. The blocking model waits in socket list order. The readiness model sorts by <code>readyAt</code>, which is what the event-loop idea depends on.</p>
+      <source-code src="../src/io-multiplexer.mjs" label="Source: src/io-multiplexer.mjs"></source-code>
+    </section>
+
+    <section aria-labelledby="check-title">
+      <h2 id="check-title">Knowledge check</h2>
+      <knowledge-check correct="c" correct-feedback="Correct. I/O multiplexing waits for readiness across many sockets." incorrect-feedback="Not quite. The key is readiness across many sockets, not reading every socket in order." empty-feedback="Choose one answer first.">
+        <form>
+          <fieldset>
+            <legend>One server thread has sockets A, B, and C. B has data now, but A is slow. What prevents B from waiting behind A?</legend>
+            <label><input type="radio" name="q1" value="a" data-feedback="Not quite. Fixed order can block on slow A while ready B waits."> Always read sockets alphabetically.</label>
+            <label><input type="radio" name="q1" value="b" data-feedback="Not quite. I/O multiplexing solves this with one thread and many sockets, not more hardware."> Give every socket a different physical network card.</label>
+            <label><input type="radio" name="q1" value="c" data-feedback="Correct. Readiness lets the thread handle B when B is ready, instead of blindly waiting on A."> Use I/O multiplexing so the thread reads sockets that are ready.</label>
+          </fieldset>
+        </form>
+      </knowledge-check>
+    </section>
+
+    <section aria-labelledby="payoff-title">
+      <h2 id="payoff-title">Interview payoff</h2>
+      <p><strong>Question:</strong> “How can one thread handle many network connections?”</p>
+      <p><strong>Model answer:</strong> “It can use I/O multiplexing. Instead of blocking on one socket, the thread asks the OS which sockets are ready for reading or writing. Then it processes ready sockets and returns to waiting. This is the core idea behind event-driven servers and event loops.”</p>
+      <div class="callout pro-tip">
+        <p><strong>Pro tip:</strong> Non-blocking does not mean “no waiting.” It means waiting in the right place: one readiness wait for many sockets, not one blind wait per socket.</p>
+      </div>
+      <p><strong>Next challenge:</strong> If readiness events arrive one by one, how does JavaScript turn them into callbacks, promises, and async/await?</p>
+    </section>
+
+    <lesson-nav home="../index.html" previous="0003-ports-and-sockets.html" next="0005-event-loop-callbacks.html"></lesson-nav>
+  </main>
+
+  <script>
+    const sockets = [
+      { id: 'A', readyAt: 5, payload: 'slow client', y: 72, kind: 'drop' },
+      { id: 'B', readyAt: 1, payload: 'chat ping', y: 165, kind: 'web' },
+      { id: 'C', readyAt: 3, payload: 'api request', y: 258, kind: 'db' },
+    ];
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const logEl = document.getElementById('demo-log');
+    const timelineBody = document.getElementById('timeline-body');
+    let running = false;
+    let events = [];
+
+    function blockingOrder() {
+      let currentTime = 0;
+      return sockets.map((socket) => {
+        currentTime = Math.max(currentTime, socket.readyAt);
+        return { ...socket, time: currentTime };
+      });
+    }
+
+    function readinessOrder() {
+      return [...sockets]
+        .sort((left, right) => left.readyAt - right.readyAt || left.id.localeCompare(right.id))
+        .map((socket) => ({ ...socket, time: socket.readyAt }));
+    }
+
+    function renderTimeline() {
+      if (events.length === 0) {
+        timelineBody.innerHTML = '<tr><td colspan="4">No events yet.</td></tr>';
+        return;
+      }
+      timelineBody.innerHTML = events.map((event, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>t=${event.time}</td>
+          <td><span class="chip ${event.kind}">socket ${event.id}</span></td>
+          <td>${event.payload}</td>
+        </tr>
+      `).join('');
+    }
+
+    function animateEvent(event) {
+      const el = document.getElementById('read-event');
+      el.setAttribute('class', `frame ${event.kind}`);
+      el.querySelector('text').textContent = `socket ${event.id}`;
+      el.style.opacity = '1';
+      el.setAttribute('transform', `translate(214 ${event.y})`);
+      if (reducedMotion) {
+        el.setAttribute('transform', 'translate(585 163)');
+      } else {
+        window.setTimeout(() => el.setAttribute('transform', 'translate(300 165)'), 120);
+        window.setTimeout(() => el.setAttribute('transform', 'translate(585 163)'), 440);
+      }
+    }
+
+    async function run(order, name) {
+      if (running) return;
+      resetDemo(`${name} running...`);
+      running = true;
+      for (const event of order) {
+        events.push(event);
+        animateEvent(event);
+        renderTimeline();
+        logEl.textContent = `${name}: handled socket ${event.id} at t=${event.time}.`;
+        await new Promise((resolve) => setTimeout(resolve, reducedMotion ? 120 : 700));
+      }
+      logEl.textContent = `${name} done. Compare when socket B was handled.`;
+      running = false;
+    }
+
+    function resetDemo(message = 'Ready. Choose blocking or readiness.') {
+      running = false;
+      events = [];
+      const el = document.getElementById('read-event');
+      el.style.opacity = '0';
+      el.setAttribute('transform', 'translate(270 165)');
+      renderTimeline();
+      logEl.textContent = message;
+    }
+
+    document.getElementById('blocking-demo').addEventListener('click', () => run(blockingOrder(), 'Blocking'));
+    document.getElementById('ready-demo').addEventListener('click', () => run(readinessOrder(), 'Readiness'));
+    document.getElementById('reset-demo').addEventListener('click', () => resetDemo());
+    resetDemo();
+  </script>
+</body>
+</html>

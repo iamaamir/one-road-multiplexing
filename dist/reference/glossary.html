@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multiplexing Glossary</title>
+  <link rel="stylesheet" href="../assets/lesson.css">
+  <link rel="expect" href="#page-ready" blocking="render">
+  <script defer src="../assets/lesson-components.js"></script>
+</head>
+<body>
+  <main>
+    <h1 id="page-ready">Multiplexing Glossary</h1>
+    <p>Canonical terms for this course. Definitions stay short and match lesson language.</p>
+
+    <section aria-labelledby="terms-title">
+      <h2 id="terms-title">Terms</h2>
+      <dl>
+        <dt><strong>Multiplexing</strong></dt>
+        <dd>Combining many logical channels onto one shared connection by sending labeled pieces. <em>Avoid:</em> “merging everything into one blob.”</dd>
+
+        <dt><strong>Demultiplexing</strong></dt>
+        <dd>Sorting mixed pieces from one shared connection back into their original logical channels. <em>Avoid:</em> “decrypting” or “unpacking” unless those also happen separately.</dd>
+
+        <dt><strong>Logical channel</strong></dt>
+        <dd>One conversation or stream inside a shared connection, such as chat, file, or video.</dd>
+
+        <dt><strong>Frame</strong></dt>
+        <dd>A small labeled piece of data from a logical channel. A frame usually carries a channel label and may carry sequence information.</dd>
+
+        <dt><strong>Channel label</strong></dt>
+        <dd>Identifier that tells the receiver which logical channel a frame belongs to.</dd>
+
+        <dt><strong>Head-of-line blocking</strong></dt>
+        <dd>A delay where work at the front of a shared path makes later work wait, even when later work is small or urgent.</dd>
+
+        <dt><strong>Scheduling</strong></dt>
+        <dd>Choosing which logical channel gets to send the next frame on a shared connection.</dd>
+
+        <dt><strong>Round-robin</strong></dt>
+        <dd>A simple scheduling rule where each non-empty logical channel gets a turn before any channel repeats.</dd>
+
+        <dt><strong>Quantum</strong></dt>
+        <dd>The maximum number of frames a logical channel can send during one scheduler turn.</dd>
+
+        <dt><strong>Port</strong></dt>
+        <dd>A transport-layer number used by the operating system to route incoming network data to a listening app.</dd>
+
+        <dt><strong>Socket</strong></dt>
+        <dd>An endpoint label, usually combining protocol, local IP address, and local port, that an app uses to send or receive network data.</dd>
+
+        <dt><strong>Listener</strong></dt>
+        <dd>An app or process that has asked the operating system to receive traffic for a specific socket.</dd>
+
+        <dt><strong>I/O multiplexing</strong></dt>
+        <dd>A way for one thread to wait for readiness across many I/O sources, then handle whichever source is ready.</dd>
+
+        <dt><strong>Blocking I/O</strong></dt>
+        <dd>An operation that makes a thread wait until one specific I/O source is ready or complete.</dd>
+
+        <dt><strong>Readiness</strong></dt>
+        <dd>A signal that an I/O source can be read from or written to without the thread blindly waiting on that one source.</dd>
+
+        <dt><strong>Event loop</strong></dt>
+        <dd>A loop that waits for readiness or scheduled work, then runs the matching handler.</dd>
+
+        <dt><strong>Task queue</strong></dt>
+        <dd>A queue of normal callbacks waiting to run on the event loop.</dd>
+
+        <dt><strong>Microtask queue</strong></dt>
+        <dd>A higher-priority queue for promise reactions and similar work that runs before the next normal task.</dd>
+
+        <dt><strong>HTTP/2 stream</strong></dt>
+        <dd>A logical HTTP conversation identified by a stream ID inside one HTTP/2 connection.</dd>
+
+        <dt><strong>Jitter</strong></dt>
+        <dd>Uneven packet arrival timing that can make real-time media glitch unless buffered.</dd>
+
+        <dt><strong>Jitter buffer</strong></dt>
+        <dd>A short delay buffer that plays media packets by timestamp instead of raw arrival order.</dd>
+
+        <dt><strong>Backpressure</strong></dt>
+        <dd>A signal or limit that prevents fast senders from overwhelming slower receivers.</dd>
+      </dl>
+    </section>
+
+    <p><a href="../index.html">Back to course home</a></p>
+  </main>
+</body>
+</html>

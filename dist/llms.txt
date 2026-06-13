@@ -1,0 +1,27 @@
+# One Road — Multiplexing Course
+
+> A free interactive course that teaches multiplexing and demultiplexing from toy-track intuition to practical systems. Covers computer networking, I/O multiplexing (select, poll, epoll, kqueue), OS ports and sockets, HTTP/2 streams and frames, event loop concurrency, head-of-line blocking, scheduling algorithms, blocking vs non-blocking I/O, WebSocket multiplexing, media time-slicing and jitter buffers, fair queuing, and a real-time chat project.
+
+This course uses interactive Web Components for demos. Run with `npx serve .` or open index.html directly in a browser. Lessons build on each other — start with lesson 1.
+
+## Lessons
+
+- [One Road, Many Conversations](lessons/0001-one-road-many-conversations.html): multiplexing and demultiplexing with labels, frames, shared medium analogy.
+- [Fair Turns on One Road](lessons/0002-fair-turns.html): head-of-line blocking, scheduling algorithms, fair queuing, round-robin.
+- [Address Labels: Ports and Sockets](lessons/0003-ports-and-sockets.html): OS demultiplexing by protocol, IP, and port; TCP and UDP sockets.
+- [One Guard, Many Doors](lessons/0004-one-guard-many-doors.html): I/O multiplexing with select, poll, epoll, kqueue; blocking vs non-blocking I/O, readiness model.
+- [Event Loop: Callbacks from Readiness](lessons/0005-event-loop-callbacks.html): event loop concurrency, readiness events, task queue, microtask queue, asynchronous I/O.
+- [HTTP/2 Streams and Frames](lessons/0006-http2-streams.html): stream IDs, binary framing, HTTP/2 multiplexing, HTTP/3 and QUIC.
+- [Media Time Slices](lessons/0007-media-time-slices.html): timestamped audio/video packets, jitter buffers, real-time transport, RTP and WebRTC.
+- [Build a Mini Multiplexed Chat](lessons/0008-mini-multiplexed-chat.html): practical app-channel protocol over one transport; real-time chat with WebSocket multiplexing.
+
+## Reference
+
+- [Glossary of multiplexing, demultiplexing and networking terms](reference/glossary.html)
+- [Multiplexing cheat sheet — protocols, APIs and patterns](reference/cheatsheet.html)
+- [Multiplexed chat capstone worksheet](reference/capstone-worksheet.html)
+- [Multiplexing resources and further reading](RESOURCES.md)
+
+## Project
+
+- [Mini Multiplexed Chat](project/mini-ws-chat.html): run a real-time WebSocket multiplexing demo where one TCP socket carries chat messages, presence indicators, and file chunk transfers using an application-layer multiplexed protocol with channel IDs and framing.
