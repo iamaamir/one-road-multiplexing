@@ -1,11 +1,262 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Lesson 8 — Build a Mini Multiplexed Chat</title><link rel="stylesheet" href="../assets/lesson.css"><link rel="expect" href="#page-ready" blocking="render"><script defer src="../assets/lesson-components.js"></script></head><body><main>
-<lesson-header><header id="page-ready" class="lesson-header"><p class="lesson-meta">Multiplexing · Lesson 8 · Practical build</p><h1>Build a Mini Multiplexed Chat</h1><p class="subtitle">Final project: one transport carries chat, presence, and file chunks as labeled frames.</p></header></lesson-header>
-<section aria-labelledby="framing-title"><h2 id="framing-title">One backpack, many labeled pockets</h2><p>You now know the pattern: one road, labels, fair turns, ports, readiness, event loops, stream IDs, timestamps. Now build the smallest useful thing: many app channels over one transport.</p><p><strong>Memorable label: “Pocket protocol.”</strong> A tiny protocol is just rules for labels, chunks, order, and rebuilding.</p><div class="callout"><p><strong>Six-year-old version:</strong> Put chat notes, “I am online” cards, and file puzzle pieces into one backpack. Every item has a pocket label.</p></div></section>
-<section aria-labelledby="concept-title"><h2 id="concept-title">Protocol shape</h2><p>Our mini protocol has three fields: <code>channel</code>, <code>sequence</code>, and <code>data</code>. The sender chunks each channel message into frames. The receiver groups frames by channel and sorts by sequence.</p><div class="callout"><p><strong>Yes, this is the same pattern again.</strong> It should feel familiar to Lesson 1. That repetition is the point: HTTP/2 streams, ports, event queues, media tracks, and app channels all reuse “label pieces, share road, sort later.”</p></div><p>A practical version could run over one WebSocket connection. MDN describes WebSocket as a persistent connection for exchanging data between browser and server <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" rel="noreferrer">(MDN WebSockets API)</a>. Real systems add flow control, errors, acknowledgements, authentication, compression, and backpressure.</p></section>
-<section aria-labelledby="demo-title"><h2 id="demo-title">Demo: one transport, three app channels</h2><p>Send frames across the shared transport. Watch chat, presence, and file rebuild separately.</p><div class="demo-panels"><figure class="demo-panel demo-svg"><h3>Mini transport</h3><svg viewBox="0 0 760 330" role="img" aria-label="Chat presence and file frames share one mini transport"><rect class="endpoint" x="45" y="60" width="135" height="55" rx="14"></rect><text class="endpoint-label" x="112" y="94" text-anchor="middle">chat</text><rect class="endpoint" x="45" y="140" width="135" height="55" rx="14"></rect><text class="endpoint-label" x="112" y="174" text-anchor="middle">presence</text><rect class="endpoint" x="45" y="220" width="135" height="55" rx="14"></rect><text class="endpoint-label" x="112" y="254" text-anchor="middle">file</text><rect class="road" x="235" y="145" width="285" height="50" rx="25"></rect><text class="endpoint-label" x="377" y="136" text-anchor="middle">one transport</text><rect class="endpoint" x="590" y="118" width="120" height="105" rx="16"></rect><text class="endpoint-label" x="650" y="156" text-anchor="middle">receiver</text><text class="endpoint-label" x="650" y="180" text-anchor="middle">demux</text><g id="chat-frame" class="frame web" transform="translate(250 155)" opacity="0"><rect width="118" height="30" rx="8"></rect><text x="59" y="20" text-anchor="middle">frame</text></g></svg><figcaption>One transport carries multiple app-level channels.</figcaption><div class="controls"><button class="primary" id="step-demo" type="button">Send next frame</button><button id="reset-demo" type="button">Reset</button></div><div id="demo-log" class="event-log" aria-live="polite">Ready. Send first frame.</div></figure><section class="demo-panel" aria-labelledby="table-title"><h3 id="table-title">Rebuilt channels</h3><table><caption>Application channel payloads</caption><thead><tr><th>Channel</th><th>Frames</th><th>Message</th></tr></thead><tbody id="channels"><tr><td>chat</td><td>0</td><td></td></tr><tr><td>presence</td><td>0</td><td></td></tr><tr><td>file</td><td>0</td><td></td></tr></tbody></table></section></div></section>
-<section class="exercise" aria-labelledby="exercise-title"><h2 id="exercise-title">Final exercise</h2><pre><code>node --test tests/mini-mux-chat.test.mjs</code></pre><p>Open <code>src/mini-mux-chat.mjs</code>. Change chunk size from 4 to 2 in the test call and predict the frame order before running it.</p><source-code src="../src/mini-mux-chat.mjs" label="Source: src/mini-mux-chat.mjs"></source-code></section>
-<section aria-labelledby="check-title"><h2 id="check-title">Knowledge check</h2><knowledge-check correct="a" correct-feedback="Correct. Labels plus sequence numbers make rebuilding possible." incorrect-feedback="Not quite. Shared transport needs channel labels and ordering information." empty-feedback="Choose one answer first."><form><fieldset><legend>What minimum frame fields does this mini protocol need?</legend><label><input type="radio" name="q1" value="a" data-feedback="Correct. Channel label demuxes, sequence orders, data carries payload."> Channel label, sequence number, and data.</label><label><input type="radio" name="q1" value="b" data-feedback="Not quite. If only data is sent, the receiver cannot know which logical channel owns it."> Only data. The receiver can guess the channel.</label><label><input type="radio" name="q1" value="c" data-feedback="Not quite. The goal is many logical messages over one shared transport."> A separate TCP connection for each message.</label></fieldset></form></knowledge-check></section>
-<section aria-labelledby="payoff-title"><h2 id="payoff-title">Final payoff</h2><p><strong>Question:</strong> “How do you know when multiplexing is the right tool?”</p><p><strong>Model answer:</strong> “Use multiplexing when multiple logical conversations need to share one physical or logical resource. Add labels so the receiver can demultiplex, sequence numbers when order matters, scheduling or flow control when channels compete, and buffering when time matters.”</p><div class="callout pro-tip"><p><strong>Pro tip:</strong> Production protocols are mostly this lesson plus hard parts: failure, fairness, backpressure, security, and observability.</p></div><div class="callout"><p><strong>Safety note:</strong> The final WebSocket project is a teaching demo. It keeps WebSocket handling deliberately small so multiplexing stays visible. Do not treat it as production networking code.</p></div><p><strong>You can now build:</strong> a practical WebSocket app where chat, presence, typing indicators, and file-upload chunks share one socket.</p></section>
-<lesson-nav home="../index.html" previous="0007-media-time-slices.html"></lesson-nav>
-</main><script>
-const frames=[['chat',0,'hell','web'],['presence',0,'onli','dns'],['file',0,'ABCD','db'],['chat',1,'o','web'],['presence',1,'ne','dns'],['file',1,'EFGH','db']];let i=0,state={chat:[],presence:[],file:[]};const log=document.getElementById('demo-log'),body=document.getElementById('channels'),card=document.getElementById('chat-frame');function render(){body.innerHTML=['chat','presence','file'].map(c=>`<tr><td><span class="chip ${c==='chat'?'web':c==='presence'?'dns':'db'}">${c}</span></td><td>${state[c].length}</td><td><code>${state[c].join('')}</code></td></tr>`).join('')}function step(){if(i>=frames.length){log.textContent='Done. Three channels rebuilt from one transport.';return}const [c,s,d,k]=frames[i++];state[c].push(d);card.setAttribute('class',`frame ${k}`);card.querySelector('text').textContent=`${c}:${s}`;card.style.opacity='1';card.setAttribute('transform','translate(600 155)');render();log.textContent=`Sent ${c}:${s} carrying “${d}”.`}function reset(){i=0;state={chat:[],presence:[],file:[]};card.style.opacity='0';render();log.textContent='Ready. Send first frame.'}document.getElementById('step-demo').addEventListener('click',step);document.getElementById('reset-demo').addEventListener('click',reset);reset();</script></body></html>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lesson 8 — Build a Mini Multiplexed Chat</title>
+    <link rel="stylesheet" href="../assets/lesson.css" />
+    <link rel="expect" href="#page-ready" blocking="render" />
+    <script defer src="../assets/lesson-components.js"></script>
+  </head>
+  <body>
+    <main>
+      <lesson-header
+        ><header id="page-ready" class="lesson-header">
+          <p class="lesson-meta">Multiplexing · Lesson 8 · Practical build</p>
+          <h1>Build a Mini Multiplexed Chat</h1>
+          <p class="subtitle">
+            Final project: one transport carries chat, presence, and file chunks as labeled frames.
+          </p>
+        </header></lesson-header
+      >
+      <section aria-labelledby="framing-title">
+        <h2 id="framing-title">One backpack, many labeled pockets</h2>
+        <p>
+          You now know the pattern: one road, labels, fair turns, ports, readiness, event loops,
+          stream IDs, timestamps. Now build the smallest useful thing: many app channels over one
+          transport.
+        </p>
+        <p>
+          <strong>Memorable label: “Pocket protocol.”</strong> A tiny protocol is just rules for
+          labels, chunks, order, and rebuilding.
+        </p>
+        <div class="callout">
+          <p>
+            <strong>Six-year-old version:</strong> Put chat notes, “I am online” cards, and file
+            puzzle pieces into one backpack. Every item has a pocket label.
+          </p>
+        </div>
+      </section>
+      <section aria-labelledby="concept-title">
+        <h2 id="concept-title">Protocol shape</h2>
+        <p>
+          Our mini protocol has three fields: <code>channel</code>, <code>sequence</code>, and
+          <code>data</code>. The sender chunks each channel message into frames. The receiver groups
+          frames by channel and sorts by sequence.
+        </p>
+        <div class="callout">
+          <p>
+            <strong>Yes, this is the same pattern again.</strong> It should feel familiar to Lesson
+            1. That repetition is the point: HTTP/2 streams, ports, event queues, media tracks, and
+            app channels all reuse “label pieces, share road, sort later.”
+          </p>
+        </div>
+        <p>
+          A practical version could run over one WebSocket connection. MDN describes WebSocket as a
+          persistent connection for exchanging data between browser and server
+          <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebSockets_API" rel="noreferrer"
+            >(MDN WebSockets API)</a
+          >. Real systems add flow control, errors, acknowledgements, authentication, compression,
+          and backpressure.
+        </p>
+      </section>
+      <section aria-labelledby="demo-title">
+        <h2 id="demo-title">Demo: one transport, three app channels</h2>
+        <p>
+          Send frames across the shared transport. Watch chat, presence, and file rebuild
+          separately.
+        </p>
+        <div class="demo-panels">
+          <figure class="demo-panel demo-svg">
+            <h3>Mini transport</h3>
+            <svg
+              viewBox="0 0 760 330"
+              role="img"
+              aria-label="Chat presence and file frames share one mini transport"
+            >
+              <rect class="endpoint" x="45" y="60" width="135" height="55" rx="14"></rect>
+              <text class="endpoint-label" x="112" y="94" text-anchor="middle">chat</text>
+              <rect class="endpoint" x="45" y="140" width="135" height="55" rx="14"></rect>
+              <text class="endpoint-label" x="112" y="174" text-anchor="middle">presence</text>
+              <rect class="endpoint" x="45" y="220" width="135" height="55" rx="14"></rect>
+              <text class="endpoint-label" x="112" y="254" text-anchor="middle">file</text>
+              <rect class="road" x="235" y="145" width="285" height="50" rx="25"></rect>
+              <text class="endpoint-label" x="377" y="136" text-anchor="middle">one transport</text>
+              <rect class="endpoint" x="590" y="118" width="120" height="105" rx="16"></rect>
+              <text class="endpoint-label" x="650" y="156" text-anchor="middle">receiver</text>
+              <text class="endpoint-label" x="650" y="180" text-anchor="middle">demux</text>
+              <g id="chat-frame" class="frame web" transform="translate(250 155)" opacity="0">
+                <rect width="118" height="30" rx="8"></rect>
+                <text x="59" y="20" text-anchor="middle">frame</text>
+              </g>
+            </svg>
+            <figcaption>One transport carries multiple app-level channels.</figcaption>
+            <div class="controls">
+              <button class="primary" id="step-demo" type="button">Send next frame</button
+              ><button id="reset-demo" type="button">Reset</button>
+            </div>
+            <div id="demo-log" class="event-log" aria-live="polite">Ready. Send first frame.</div>
+          </figure>
+          <section class="demo-panel" aria-labelledby="table-title">
+            <h3 id="table-title">Rebuilt channels</h3>
+            <table>
+              <caption>
+                Application channel payloads
+              </caption>
+              <thead>
+                <tr>
+                  <th>Channel</th>
+                  <th>Frames</th>
+                  <th>Message</th>
+                </tr>
+              </thead>
+              <tbody id="channels">
+                <tr>
+                  <td>chat</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>presence</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>file</td>
+                  <td>0</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+        </div>
+      </section>
+      <section class="exercise" aria-labelledby="exercise-title">
+        <h2 id="exercise-title">Final exercise</h2>
+        <pre><code>node --test tests/mini-mux-chat.test.mjs</code></pre>
+        <p>
+          Open <code>src/mini-mux-chat.mjs</code>. Change chunk size from 4 to 2 in the test call
+          and predict the frame order before running it.
+        </p>
+        <source-code
+          src="../src/mini-mux-chat.mjs"
+          label="Source: src/mini-mux-chat.mjs"
+        ></source-code>
+      </section>
+      <section aria-labelledby="check-title">
+        <h2 id="check-title">Knowledge check</h2>
+        <knowledge-check
+          correct="a"
+          correct-feedback="Correct. Labels plus sequence numbers make rebuilding possible."
+          incorrect-feedback="Not quite. Shared transport needs channel labels and ordering information."
+          empty-feedback="Choose one answer first."
+          ><form>
+            <fieldset>
+              <legend>What minimum frame fields does this mini protocol need?</legend>
+              <label
+                ><input
+                  type="radio"
+                  name="q1"
+                  value="a"
+                  data-feedback="Correct. Channel label demuxes, sequence orders, data carries payload."
+                />
+                Channel label, sequence number, and data.</label
+              ><label
+                ><input
+                  type="radio"
+                  name="q1"
+                  value="b"
+                  data-feedback="Not quite. If only data is sent, the receiver cannot know which logical channel owns it."
+                />
+                Only data. The receiver can guess the channel.</label
+              ><label
+                ><input
+                  type="radio"
+                  name="q1"
+                  value="c"
+                  data-feedback="Not quite. The goal is many logical messages over one shared transport."
+                />
+                A separate TCP connection for each message.</label
+              >
+            </fieldset>
+          </form></knowledge-check
+        >
+      </section>
+      <section aria-labelledby="payoff-title">
+        <h2 id="payoff-title">Final payoff</h2>
+        <p><strong>Question:</strong> “How do you know when multiplexing is the right tool?”</p>
+        <p>
+          <strong>Model answer:</strong> “Use multiplexing when multiple logical conversations need
+          to share one physical or logical resource. Add labels so the receiver can demultiplex,
+          sequence numbers when order matters, scheduling or flow control when channels compete, and
+          buffering when time matters.”
+        </p>
+        <div class="callout pro-tip">
+          <p>
+            <strong>Pro tip:</strong> Production protocols are mostly this lesson plus hard parts:
+            failure, fairness, backpressure, security, and observability.
+          </p>
+        </div>
+        <div class="callout">
+          <p>
+            <strong>Safety note:</strong> The final WebSocket project is a teaching demo. It keeps
+            WebSocket handling deliberately small so multiplexing stays visible. Do not treat it as
+            production networking code.
+          </p>
+        </div>
+        <p>
+          <strong>You can now build:</strong> a practical WebSocket app where chat, presence, typing
+          indicators, and file-upload chunks share one socket.
+        </p>
+      </section>
+      <lesson-nav home="../index.html" previous="0007-media-time-slices.html"></lesson-nav>
+    </main>
+    <script>
+      const frames = [
+        ["chat", 0, "hell", "web"],
+        ["presence", 0, "onli", "dns"],
+        ["file", 0, "ABCD", "db"],
+        ["chat", 1, "o", "web"],
+        ["presence", 1, "ne", "dns"],
+        ["file", 1, "EFGH", "db"],
+      ];
+      let i = 0,
+        state = { chat: [], presence: [], file: [] };
+      const log = document.getElementById("demo-log"),
+        body = document.getElementById("channels"),
+        card = document.getElementById("chat-frame");
+      function render() {
+        body.innerHTML = ["chat", "presence", "file"]
+          .map(
+            (c) =>
+              `<tr><td><span class="chip ${c === "chat" ? "web" : c === "presence" ? "dns" : "db"}">${c}</span></td><td>${state[c].length}</td><td><code>${state[c].join("")}</code></td></tr>`,
+          )
+          .join("");
+      }
+      function step() {
+        if (i >= frames.length) {
+          log.textContent = "Done. Three channels rebuilt from one transport.";
+          return;
+        }
+        const [c, s, d, k] = frames[i++];
+        state[c].push(d);
+        card.setAttribute("class", `frame ${k}`);
+        card.querySelector("text").textContent = `${c}:${s}`;
+        card.style.opacity = "1";
+        card.setAttribute("transform", "translate(600 155)");
+        render();
+        log.textContent = `Sent ${c}:${s} carrying “${d}”.`;
+      }
+      function reset() {
+        i = 0;
+        state = { chat: [], presence: [], file: [] };
+        card.style.opacity = "0";
+        render();
+        log.textContent = "Ready. Send first frame.";
+      }
+      document.getElementById("step-demo").addEventListener("click", step);
+      document.getElementById("reset-demo").addEventListener("click", reset);
+      reset();
+    </script>
+  </body>
+</html>
