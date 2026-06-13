@@ -39,6 +39,8 @@ async function build() {
     await cp(src, join(DIST, item), { recursive: true });
   }
 
+  await writeFile(join(DIST, '.nojekyll'), '');
+
   console.log(`Built to ${DIST}`);
   console.log('Deploy dist/ to GitHub Pages or any static host.');
 }
