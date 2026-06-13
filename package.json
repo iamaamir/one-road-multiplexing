@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build-static.mjs",
-    "start": "npm run build && npx serve dist/"
+    "start": "npm run build && npx serve docs/"
   },
   "devDependencies": {
     "html-minifier-terser": "^7.2.0",

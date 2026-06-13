@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { execSync } from 'node:child_process';
 
 const ROOT = new URL('..', import.meta.url).pathname;
-const DIST = join(ROOT, 'dist');
+const DIST = join(ROOT, 'docs');
 
 const INCLUDES = [
   'lessons', 'assets', 'reference', 'project', 'src',
@@ -109,7 +109,7 @@ async function build() {
     await cp(src, join(DIST, item), { recursive: true });
   }
 
-  // Copy root-level SEO files from assets/ to dist/ root
+  // Copy root-level SEO files from assets/ to docs/ root
   for (const file of ROOT_ASSETS) {
     const src = join(ROOT, 'assets', file);
     if (!existsSync(src)) continue;
@@ -132,7 +132,7 @@ async function build() {
     .reduce((sum, f) => sum + (existsSync(f) ? statSync(f).size : 0), 0);
 
   console.log(`\nBuilt to ${DIST} (${(totalBytes / 1024).toFixed(0)} KB)`);
-  console.log('Deploy dist/ to GitHub Pages or any static host.');
+  console.log('Deploy docs/ to GitHub Pages or any static host.');
 }
 
 build().catch(console.error);
