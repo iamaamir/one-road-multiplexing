@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "lesson-craft": {
+      "source": "iamaamir/arc-forge",
+      "sourceType": "github",
+      "skillPath": "skills/teaching/lesson-craft/SKILL.md",
+      "computedHash": "a955a35fc1372ec0b9cf2b3d131675fc40c8d0513b92b30ee3dbe26d21ca3517"
+    }
+  }
+}

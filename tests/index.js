@@ -1,0 +1,9 @@
+import './multiplexer.test.mjs';
+import './fair-scheduler.test.mjs';
+import './port-demux.test.mjs';
+import './io-multiplexer.test.mjs';
+import './event-loop.test.mjs';
+import './http2-frames.test.mjs';
+import './media-mux.test.mjs';
+import './mini-mux-chat.test.mjs';
+import './ws-text-frame.test.mjs';

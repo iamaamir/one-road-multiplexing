@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Multiplexing Course</title>
+  <link rel="stylesheet" href="assets/lesson.css">
+  <link rel="expect" href="#page-ready" blocking="render">
+  <script defer src="assets/lesson-components.js"></script>
+</head>
+<body>
+  <main>
+    <header id="page-ready" class="lesson-header">
+      <p class="lesson-meta">Interactive Course</p>
+      <h1>Multiplexing</h1>
+      <p class="subtitle">Understand multiplexing and demultiplexing from toy-track intuition to practical systems.</p>
+    </header>
+
+    <section aria-labelledby="mission-title" class="course-card">
+      <h2 id="mission-title">Mission</h2>
+      <p>Learn to explain multiplexing to a six-year-old, recognize problems it solves, and build a practical real-world use case using one shared transport for many logical channels.</p>
+    </section>
+
+    <section aria-labelledby="roadmap-title" class="course-card">
+      <h2 id="roadmap-title">Roadmap</h2>
+      <p id="course-progress" class="connection-indicator" data-state="connected" aria-live="polite">0 of 8 lessons completed</p>
+      <ol>
+        <li><a href="lessons/0001-one-road-many-conversations.html">One Road, Many Conversations</a> — labels, frames, multiplexing, demultiplexing.</li>
+        <li><a href="lessons/0002-fair-turns.html">Fair Turns on One Road</a> — head-of-line blocking, scheduling, fairness.</li>
+        <li><a href="lessons/0003-ports-and-sockets.html">Address Labels: Ports and Sockets</a> — OS demultiplexing by protocol, IP, and port.</li>
+        <li><a href="lessons/0004-one-guard-many-doors.html">One Guard, Many Doors</a> — I/O multiplexing, readiness, blocking vs non-blocking.</li>
+        <li><a href="lessons/0005-event-loop-callbacks.html">Event Loop: Callbacks from Readiness</a> — readiness events, task queue, microtask queue.</li>
+        <li><a href="lessons/0006-http2-streams.html">HTTP/2 Streams and Frames</a> — stream IDs, frames, web request multiplexing.</li>
+        <li><a href="lessons/0007-media-time-slices.html">Media Time Slices</a> — timestamped audio/video packets and jitter buffers.</li>
+        <li><a href="lessons/0008-mini-multiplexed-chat.html">Build a Mini Multiplexed Chat</a> — practical app-channel protocol over one transport.</li>
+      </ol>
+    </section>
+
+    <section aria-labelledby="reference-title" class="course-card">
+      <h2 id="reference-title">Reference</h2>
+      <ul>
+        <li><a href="reference/glossary.html">Glossary</a></li>
+        <li><a href="reference/cheatsheet.html">Multiplexing cheat sheet</a></li>
+        <li><a href="reference/capstone-worksheet.html">Capstone worksheet</a></li>
+        <li><a href="RESOURCES.md">Resources</a></li>
+      </ul>
+    </section>
+
+    <section aria-labelledby="project-title" class="course-card">
+      <h2 id="project-title">Final project</h2>
+      <p>Run a real WebSocket demo where one socket carries chat, presence, and file chunks.</p>
+      <p><a href="project/mini-ws-chat.html">Open Mini Multiplexed Chat</a></p>
+    </section>
+  </main>
+</body>
+</html>
