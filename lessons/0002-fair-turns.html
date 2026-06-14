@@ -32,6 +32,9 @@
       <p><strong>Head-of-line blocking</strong> happens when something at the front of a shared path makes everything behind it wait. In our course language: one logical channel can hog the shared connection, delaying other frames.</p>
       <p>The fix is <strong>scheduling</strong>: deciding which channel sends next. A simple beginner rule is <strong>round-robin</strong>: file gets a turn, chat gets a turn, video gets a turn, then repeat.</p>
       <p>HTTP/2 frames from many streams share one TCP connection <a href="https://www.rfc-editor.org/rfc/rfc9113.html" rel="noreferrer">(RFC 9113)</a>. That makes scheduling important, because a protocol can mix streams only if it chooses frame order carefully.</p>
+      <div class="callout pattern-callout">
+        <p><strong>One tunnel, many lanes:</strong> Think of HTTP/2 as many logical lanes painted inside one TCP tunnel. Scheduling decides which lane gets the next car. But if the tunnel entrance is blocked, every lane waits. This is why multiplexing is not the same thing as unlimited parallelism.</p>
+      </div>
     </section>
 
     <section aria-labelledby="demo-title">

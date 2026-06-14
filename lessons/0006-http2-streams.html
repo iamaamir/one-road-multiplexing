@@ -52,6 +52,9 @@
           needs good scheduling. Also, because HTTP/2 commonly runs over TCP, TCP-level head-of-line
           blocking can still matter if a packet is lost.
         </p>
+        <div class="callout pattern-callout">
+          <p><strong>Six-lane idea:</strong> HTTP/2 gives requests logical lanes, but those lanes still sit inside one TCP tunnel. QUIC and HTTP/3 move closer to independent lanes: loss in one stream does not have to block every other stream the same way.</p>
+        </div>
       </section>
       <section aria-labelledby="demo-title">
         <h2 id="demo-title">Demo: two web streams, one TCP road</h2>
