@@ -16,7 +16,9 @@
       <p class="subtitle">Use this worksheet to design your own one-road, many-channels system before writing code.</p>
     </header>
 
-    <p class="print-note">Tip: print this page or fill it in browser notes. Nothing is submitted.</p>
+    <p class="print-note">Tip: this page auto-saves in this browser with localStorage. Nothing is submitted.</p>
+    <p id="save-status" class="saved-status" aria-live="polite">Worksheet ready.</p>
+    <p class="controls"><button type="button" id="clear-worksheet">Clear saved worksheet</button></p>
 
     <section class="course-card" aria-labelledby="scenario-title">
       <h2 id="scenario-title">1. Scenario</h2>
@@ -87,5 +89,34 @@
 
     <p><a href="../index.html">Back to course home</a></p>
   </main>
+
+  <script>
+    const storagePrefix = 'multiplexing.capstone.';
+    const statusEl = document.getElementById('save-status');
+    const fields = document.querySelectorAll('textarea, input[type="text"]');
+
+    function fieldKey(field) {
+      return `${storagePrefix}${field.id || field.getAttribute('aria-label')}`;
+    }
+
+    function saveField(field) {
+      localStorage.setItem(fieldKey(field), field.value);
+      statusEl.textContent = `Saved ${new Date().toLocaleTimeString()}.`;
+    }
+
+    for (const field of fields) {
+      const saved = localStorage.getItem(fieldKey(field));
+      if (saved !== null) field.value = saved;
+      field.addEventListener('input', () => saveField(field));
+    }
+
+    document.getElementById('clear-worksheet').addEventListener('click', () => {
+      for (const field of fields) {
+        localStorage.removeItem(fieldKey(field));
+        field.value = '';
+      }
+      statusEl.textContent = 'Saved worksheet cleared.';
+    });
+  </script>
 </body>
 </html>

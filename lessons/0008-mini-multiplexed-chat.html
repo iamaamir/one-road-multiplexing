@@ -44,7 +44,7 @@
           <code>data</code>. The sender chunks each channel message into frames. The receiver groups
           frames by channel and sorts by sequence.
         </p>
-        <div class="callout">
+        <div class="callout pattern-callout">
           <p>
             <strong>Yes, this is the same pattern again.</strong> It should feel familiar to Lesson
             1. That repetition is the point: HTTP/2 streams, ports, event queues, media tracks, and
@@ -138,6 +138,20 @@
           Open <code>src/mini-mux-chat.mjs</code>. Change chunk size from 4 to 2 in the test call
           and predict the frame order before running it.
         </p>
+        <details>
+          <summary>Reveal expected frame order for chunk size 2</summary>
+          <pre><code>chat:0:he
+presence:0:on
+file:0:AB
+chat:1:ll
+presence:1:li
+file:1:CD
+chat:2:o
+presence:2:ne
+file:2:EF
+file:3:GH</code></pre>
+          <p>The file channel keeps going after chat and presence are finished. Same road, fewer active channels near the end.</p>
+        </details>
         <source-code
           src="../src/mini-mux-chat.mjs"
           label="Source: src/mini-mux-chat.mjs"
@@ -209,6 +223,7 @@
           indicators, and file-upload chunks share one socket.
         </p>
       </section>
+      <p class="callout"><strong>Next:</strong> <a href="../reference/next-steps.html">Where to go after this course</a></p>
       <lesson-nav home="../index.html" previous="0007-media-time-slices.html"></lesson-nav>
     </main>
     <script>

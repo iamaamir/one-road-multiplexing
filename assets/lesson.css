@@ -104,12 +104,14 @@ button.primary:hover:not(:disabled) { background: var(--color-primary-hover); }
   padding: 0.55rem 0.9rem;
 }
 @media (max-width: 640px) { .channel-form { grid-template-columns: 1fr; } }
-.media-timeline { display: grid; gap: 0.55rem; margin: 1rem 0; }
+.media-timeline { display: grid; gap: 0.7rem; margin: 1rem 0; padding: 0.85rem; border: 1px solid var(--color-border); border-radius: var(--radius); background: #f8fbff; }
+.media-axis { display: grid; grid-template-columns: 4.5rem 1fr; gap: 0.6rem; color: var(--color-muted); font-family: var(--font-code); font-size: 0.78rem; }
+.media-axis-line { display: flex; justify-content: space-between; padding-inline: 0.2rem; }
 .media-track { display: grid; grid-template-columns: 4.5rem 1fr; gap: 0.6rem; align-items: center; }
 .media-track-label { font-weight: 800; color: var(--color-heading); }
-.media-track-line { position: relative; min-height: 2.2rem; border: 1px solid var(--color-border); border-radius: 999px; background: #f8fbff; }
-.media-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); padding: 0.18rem 0.45rem; border: 1px solid #071527; border-radius: 999px; font-family: var(--font-code); font-size: 0.78rem; font-weight: 800; background: var(--color-panel); }
-.media-dot.played { outline: 3px solid var(--color-success); }
+.media-track-line { position: relative; min-height: 2.6rem; border: 1px solid var(--color-border); border-radius: 999px; background: linear-gradient(90deg, #eaf3ff 0 1px, transparent 1px) 0 0 / 25% 100%, #ffffff; }
+.media-dot { position: absolute; top: 50%; transform: translate(-50%, -50%); padding: 0.22rem 0.52rem; border: 1px solid #071527; border-radius: 999px; font-family: var(--font-code); font-size: 0.78rem; font-weight: 800; background: var(--color-panel); box-shadow: 0 2px 8px rgba(7, 21, 39, 0.12); }
+.media-dot.played { outline: 3px solid var(--color-success); background: #eefbf1; }
 .event-log, .demo-log { background: #102033; color: #eaf3ff; border-radius: var(--radius); padding: 0.75rem; font-size: 0.9rem; max-height: 220px; overflow-y: auto; }
 .event-log div + div { margin-top: 0.35rem; }
 table { width: 100%; border-collapse: collapse; background: var(--color-surface); }
@@ -127,6 +129,9 @@ textarea, input[type="text"] { width: 100%; padding: 0.65rem; border: 1px solid 
 textarea { min-height: 6rem; resize: vertical; }
 .worksheet-grid { display: grid; gap: 1rem; }
 .print-note { color: var(--color-muted); font-size: 0.95rem; }
+.pattern-callout { background: #fff6e9; border-color: #e6a85a; }
+.pattern-callout strong { color: #7a3d00; }
+.saved-status { display: inline-flex; align-items: center; gap: 0.45rem; margin: 0.5rem 0 1rem; color: var(--color-muted); font-size: 0.95rem; }
 @media print {
   body { background: #fff; color: #000; max-width: none; }
   main, .course-card, .callout, .exercise, knowledge-check, .source-code { box-shadow: none; }

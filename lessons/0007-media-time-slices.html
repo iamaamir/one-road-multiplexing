@@ -206,7 +206,7 @@
       const timeline = document.getElementById("media-timeline"),
         progress = document.getElementById("media-progress");
       function renderTimeline() {
-        timeline.innerHTML = ["audio", "video"]
+        timeline.innerHTML = '<div class="media-axis"><span></span><span class="media-axis-line"><span>0ms</span><span>20ms</span><span>43ms</span></span></div>' + ["audio", "video"]
           .map(
             (track) =>
               `<div class="media-track"><span class="media-track-label">${track}</span><div class="media-track-line">${packets
