@@ -60,6 +60,14 @@ pre { background: #102033; color: #eaf3ff; padding: 1rem; border-radius: var(--r
 .subtitle { color: var(--color-muted); font-size: 1.15rem; max-width: 68ch; }
 .lesson-nav { display: flex; justify-content: space-between; gap: 1rem; margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--color-border); }
 .nav-prev-next { margin-left: auto; display: flex; gap: 1rem; }
+.lesson-nav a { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+@media (max-width: 520px) {
+  .lesson-nav { display: grid; grid-template-columns: repeat(3, minmax(44px, 1fr)); gap: 0.55rem; align-items: center; }
+  .nav-prev-next { display: contents; }
+  .lesson-nav a { min-width: 44px; min-height: 44px; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: 999px; background: var(--color-surface); font-size: 1.15rem; text-decoration: none; }
+  .lesson-nav .nav-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+  .lesson-nav a:hover { background: var(--color-panel); }
+}
 .course-card, .callout, .exercise, knowledge-check, .source-code { padding: 1rem; margin: 1rem 0; }
 knowledge-check { display: block; }
 .callout { background: #eef7ff; border-color: #9fc7ef; }

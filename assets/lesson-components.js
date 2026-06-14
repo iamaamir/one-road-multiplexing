@@ -105,11 +105,10 @@ define('lesson-nav', class extends HTMLElement {
     const home = this.getAttribute('home');
     this.innerHTML = `
       <nav class="lesson-nav" aria-label="Lesson navigation">
-        ${home ? `<a href="${home}" class="nav-home" rel="home">🏠 Course Home</a>` : ''}
-        ${home ? `<a href="${home.replace('index.html', 'reference/cheatsheet.html')}" class="nav-cheatsheet">📌 Cheat Sheet</a>` : ''}
+        ${home ? `<a href="${home}" class="nav-home" rel="home" aria-label="Course home"><span aria-hidden="true">🏠</span><span class="nav-label"> Course Home</span></a>` : ''}
         <span class="nav-prev-next">
-          ${prev ? `<a href="${prev}" class="nav-prev" rel="prev">← Previous</a>` : ''}
-          ${next ? `<a href="${next}" class="nav-next" rel="next">Next →</a>` : ''}
+          ${prev ? `<a href="${prev}" class="nav-prev" rel="prev" aria-label="Previous lesson"><span aria-hidden="true">←</span><span class="nav-label"> Previous</span></a>` : ''}
+          ${next ? `<a href="${next}" class="nav-next" rel="next" aria-label="Next lesson"><span class="nav-label">Next </span><span aria-hidden="true">→</span></a>` : ''}
         </span>
       </nav>
     `;
